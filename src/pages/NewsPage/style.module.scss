@@ -1,12 +1,5 @@
 @import '../../styles/variables.scss';
 
-.newsTitle {
-    margin: 0 0 1rem 0;
-    max-width: 30rem;
-    text-align: center;
-}
-
-
 .content {
     position: absolute;
     top: 0;
@@ -14,18 +7,144 @@
     right: 0;
     bottom: 0;
     overflow-y: auto;
+    background-color: #1f1f1f;
     transition: margin-left 0.3s ease, width 0.3s ease;
     z-index: 0;
 }
 
-.contentBlock{
+.body {
     display: flex;
-    flex-direction: column;
-    margin:1rem, 10rem, 1rem, 10rem;
-    justify-content: center;
-    align-items: center;
+    gap: 24px;
+    padding: 24px 10rem;
+    align-items: flex-start;
 }
 
-.link{
+// --- Sidebar -------------------------------------------------------------
+
+.sidebar {
+    min-width: 220px;
+    max-width: 220px;
+    background-color: #262626;
+    border-radius: 8px;
+    padding: 16px 0;
+    position: sticky;
+    top: 24px;
+}
+
+.typeList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.typeItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 400;
+    color: #ffffff;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        background-color: rgba(128, 0, 32, 0.15);
+    }
+}
+
+.typeItemActive {
+    font-weight: 700;
+    color: #800020;
+    background-color: rgba(128, 0, 32, 0.12);
+}
+
+// --- Main content ----------------------------------------------------------
+
+.contentBlock {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.newsTitle {
+    margin: 0 0 1rem 0;
+    color: #ffffff;
+}
+
+.loadingWrap {
+    display: flex;
+    justify-content: center;
+    padding: 4rem 0;
+}
+
+// --- Card list ---------------------------------------------------------
+
+.newsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.link {
     text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+// --- Pagination ----------------------------------------------------------
+
+.paginationWrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+.pagination {
+    :global(.ant-pagination-item),
+    :global(.ant-pagination-prev .ant-pagination-item-link),
+    :global(.ant-pagination-next .ant-pagination-item-link) {
+        background-color: #262626;
+        border-color: #3a3a3a;
+    }
+
+    :global(.ant-pagination-item a) {
+        color: #ffffff;
+    }
+
+    :global(.ant-pagination-item-active) {
+        border-color: #800020;
+
+        a {
+            color: #800020;
+        }
+    }
+}
+
+@media (max-width: 900px) {
+    .body {
+        flex-direction: column;
+        padding: 16px;
+    }
+
+    .sidebar {
+        max-width: 100%;
+        width: 100%;
+        position: static;
+    }
 }

@@ -12,6 +12,7 @@ import HomePage from './pages/HomePage';
 import MoviePage from './pages/MoviePage';
 import AuthProvider from './elements/AuthProvider';
 import TheRoutes from './elements/TheRoutes';
+import {ErrorProvider} from './tools/errorContext';
 
 
 
@@ -19,13 +20,15 @@ import TheRoutes from './elements/TheRoutes';
 const App = () => {
 
   return (
-    <div className={style.container}>
+    // <div className={style.container}>
+    <ErrorProvider>
       <AuthProvider>
         <TheRoutes />
       </AuthProvider>
+    </ErrorProvider>
 
 
-      {/* <Router>
+      /* <Router>
         <Routes>
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -35,8 +38,8 @@ const App = () => {
           <Route path="/:type/:id" element={<MoviePage />} />
         </Routes>
 
-      </Router> */}
-    </div>
+      </Router> */
+    // </div>
   );
 }
 

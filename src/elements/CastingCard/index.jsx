@@ -13,7 +13,13 @@ const CastingCard = ({ card, activeTab }) => {
         <div className={style.card} key={card.id}>
             <div className={style.title}>
                 <p className={style.cardTitle}>{card.title}</p>
-                <DrawerCasting key={card.id} tabCasting={activeTab} castingId={card.id} />
+                <DrawerCasting
+                    key={card.id}
+                    tabCasting={activeTab}
+                    castingId={card.id}
+                    submissionId={card.submissionId}
+                    card={card}
+                />
             </div>
             <div className={style.columns}>
                 <div className={style.firstColumn}>

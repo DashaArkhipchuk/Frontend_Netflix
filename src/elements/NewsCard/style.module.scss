@@ -1,52 +1,88 @@
 @import '../../styles/variables';
 
-.container{
+.container {
     background-color: #f9f1e4;
     color: #262425;
     padding: 0.5em;
-    margin:10px;
-
+    margin: 10px;
+    box-sizing: border-box;
 }
 
-.img{
+.img {
+    // flex-grow: 2 against cardDetails' flex-grow: 1 gives the image
+    // roughly a 2:1 share of the row (~60/30-ish split). The old 420px cap
+    // would have prevented it from ever reaching that share on wide
+    // screens, so it's raised well above what any reasonable card width
+    // would need.
+    flex: 2 1 280px;
+    min-width: 180px;
+    max-width: 900px;
+    aspect-ratio: 16 / 10;
+    height: auto;
     background-color: #3a3a3a;
-    width:280px;
-    height: 360px;
+    object-fit: cover;
+    border-radius: 4px;
 }
 
-.flexContainer{
-    margin:0.5em;
-    display:flex;
-    gap:1.5em;
-    padding:10px;
+.flexContainer {
+    margin: 0.5em;
+    display: flex;
+    gap: 1.5em;
+    padding: 10px;
+    align-items: flex-start;
 }
 
-.cardDetails{
-    margin: 0px, 50rem, 0px, 50rem;
-    width:565px;
+.cardDetails {
+    // flex-grow: 1 against .img's flex-grow: 2 gives text roughly a third
+    // of the row's extra space, matching the ~60/30 image/text split.
+    flex: 1 1 200px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-.title{
+.title {
     font-family: 'Poppins';
     font-weight: 600;
     font-size: 20px;
     color: #262425;
+    overflow-wrap: break-word;
 }
 
-.content{
+.content {
     font-family: 'Poppins';
     font-weight: 400;
     font-size: 14px;
     color: #262425;
+    overflow-wrap: break-word;
+    flex: 1;
 }
 
-.moreButton{
+.moreButton {
     font-family: 'Poppins';
     font-weight: 600;
     font-size: 16px;
     color: #800020;
-    border: 0px solid red;
-    display: block;
-margin-left: auto;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    margin-top: 12px;
+    padding: 0;
+    cursor: pointer;
 }
 
+// Below this width the fixed 280px image no longer leaves reasonable room
+// for the text column, so stack image-on-top instead of side-by-side.
+@media (max-width: 560px) {
+    .flexContainer {
+        flex-direction: column;
+    }
+
+    .img {
+        width: 100%;
+        height: 220px;
+    }
+}

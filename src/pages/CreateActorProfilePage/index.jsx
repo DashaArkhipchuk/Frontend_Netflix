@@ -3,8 +3,14 @@ import axios from 'axios'; // Імпортуємо axios
 import styles from './style.module.scss';
 import ThankButton from '../../elements/ThankButton'; // Імпортуємо ThankButton
 import { useParams } from 'react-router-dom';
+import useRequireRole from '../../tools/useRequireRole'; // Імпортуємо кастомний хук для перевірки ролі
+import { useError } from '../../tools/errorContext'; // Імпортуємо контекст для помилок
+import { handleApiError } from '../../tools/handleApiError';
 
 const CreateActorProfilePage = () => {
+    useRequireRole({ requireActor: true });
+    const {addError} = useError();
+
     const { castingId } = useParams();
     const [formData, setFormData] = useState({
         stageName: '',
@@ -34,15 +40,14 @@ const CreateActorProfilePage = () => {
 
     const handleSubmit = async () => {
         try {
-            const token = localStorage.getItem('authToken'); // Припустимо, токен зберігається в localStorage
+            const token = localStorage.getItem('token'); // Припустимо, токен зберігається в localStorage
 
             const response = await axios.post(
                 'https://localhost:7118/api/ActorProfile/CreateProfile',
                 formData,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Додаємо токен до заголовків
+                        'Content-Type': 'application/json'
                     },
                 }
             );
@@ -52,10 +57,13 @@ const CreateActorProfilePage = () => {
                 return true;
             } else {
                 console.error('Error creating profile:', response.data);
+                addError('Failed to create profile. Please try again.');
                 return false;
+                
             }
         } catch (error) {
             console.error('Error occurred during profile creation:', error);
+            handleApiError(error, addError);
             return false;
         }
     };
@@ -68,7 +76,7 @@ const CreateActorProfilePage = () => {
                 });
                 setLocations(response.data);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                handleApiError(error, addError);
             }
         };
         fetchData();
@@ -82,7 +90,7 @@ const CreateActorProfilePage = () => {
                 });
                 setEthnicAppearance(response.data);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                handleApiError(error, addError);
             }
         };
         fetchData();

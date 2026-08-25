@@ -3,17 +3,30 @@
     flex-direction: row;
     gap:10px;
     width: 100%;
-    height: 150px;
+    // Was a hard "height: 150px" with no overflow handling — any content
+    // taller than that (a 3-4 line title, in particular) just visually
+    // spilled past the card's border instead of being contained, which is
+    // what was dragging the Read More button out past the outline.
+    // min-height keeps the box a consistent size for the common case while
+    // letting it grow when content genuinely needs more room.
+    min-height: 150px;
     border:1px solid #5b5b5b;
     padding:10px;
     margin-bottom:10px;
+    box-sizing: border-box;
 }
 
 .itemInfo{
-    width:250px;
+    // Was a fixed 250px; flex:1 lets it fill whatever space is actually
+    // left next to the image instead of assuming a specific parent width.
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .newsImg{
+    flex-shrink: 0;
     width:130px;
     height: 120px;
     background-color: #3a3a3a;
@@ -25,11 +38,14 @@
     font-size: 14px;
     color: #f9f1e4;
     font-weight: 400;
+    overflow-wrap: break-word;
+    margin: 0 0 6px 0;
 }
 
 .itemPublishingInfo{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap:10px;
     font-family: 'Poppins';
     font-size: 12px;
@@ -37,14 +53,39 @@
     font-weight: 400;
 }
 
+.itemDateOfPublishing{
+    // A date like "7/4/2026" has no natural break point — without this it
+    // was being force-broken mid-character when the row ran tight on space.
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.itemAuthor{
+    // Some sources store a raw URL as the "author" field, which has no
+    // spaces to wrap at naturally and was overflowing past the card's
+    // right edge. overflow-wrap: break-word only breaks it when it
+    // genuinely doesn't fit, rather than pre-emptively splitting every
+    // short word/number the way overflow-wrap: anywhere does.
+    overflow-wrap: break-word;
+    min-width: 0;
+    flex: 1;
+    margin: 0;
+}
+
 .itemReadMoreButton{
     font-family: 'Poppins';
     font-size: 14px;
     color: #f9f1e4;
     font-weight: 400;
-    width:130px;
-    height: 20px;
-    border: 0px solid red;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+    height: auto;
+    border: none;
     background-color: #262425;
-    margin-bottom: 0px;
+    padding: 4px 10px;
+    margin-top: auto;
+    cursor: pointer;
 }

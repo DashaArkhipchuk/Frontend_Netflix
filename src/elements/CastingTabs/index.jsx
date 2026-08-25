@@ -1,8 +1,13 @@
 import React from 'react';
 import { ConfigProvider, Tabs } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import style from './style.module.scss';
+import { useAuth } from '../AuthProvider';
 
 const CastingTabs = ({ activeTab, setActiveTab }) => {
+    const { isActor, isDirector } = useAuth();
+    const navigate = useNavigate();
+
     const items = [
         {
             key: '1',
@@ -13,31 +18,37 @@ const CastingTabs = ({ activeTab, setActiveTab }) => {
                     <p className={style.tabContent}>
                         We invite you to the world of possibilities on our casting website!
                         Here your talent will find its true expression and your dreams will come true.
-                        Whether you're an actor, model, singer, or dancer, we have a variety of exciting projects waiting for you.
                         Register today, take an audition, and become a star of the future!
-                        Your path to success starts here.
                     </p>
                 </>
             ),
         },
-        {
+        // Tab 2 for actors = their submissions
+        ...(isActor ? [{
             key: '2',
-            label: <p className={style.tabName}>Castings Directors</p>,
+            label: <p className={style.tabName}>My Submissions</p>,
             children: (
                 <>
-                    <h1 className={style.tabContentName}>CASTING DIRECTORS AND AUDITIONS</h1>
+                    <h1 className={style.tabContentName}>MY SUBMISSIONS</h1>
                     <p className={style.tabContent}>
-                        We invite you to the world of possibilities on our casting website!
-                        Here your talent will find its true expression and your dreams will come true.
-                        Whether you're an actor, model, singer, or dancer, we have a variety of exciting projects waiting for you.
-                        Register today, take an audition, and become a star of the future!
-                        Your path to success starts here.
+                        View all the casting calls you have submitted to.
                     </p>
                 </>
-
             ),
-        },
-
+        }] : []),
+        // Tab 2 for directors = their castings
+        ...(isDirector ? [{
+            key: '3',
+            label: <p className={style.tabName}>My Castings</p>,
+            children: (
+                <>
+                    <h1 className={style.tabContentName}>MY CASTINGS</h1>
+                    <p className={style.tabContent}>
+                        Manage the casting calls you have created.
+                    </p>
+                </>
+            ),
+        }] : []),
     ];
 
     return (

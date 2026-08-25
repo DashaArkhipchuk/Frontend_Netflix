@@ -1,8 +1,10 @@
-import React, { act, useState } from 'react';
+import React, { act, useState, useEffect } from 'react';
 import { ConfigProvider, Tabs } from 'antd';
 import style from './style.module.scss';
 import SortedFilms from '../SortedFilms';
 import CarouselGenres from '../CarouselGenres';
+import FilmsFilterControls from '../FilmsFilterControls';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const MovieIcon = () => (
     <svg className={style.icon} width="17" height="17" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -60,25 +62,72 @@ const CartoonIcon = () => (
         </defs>
     </svg>
 );
+
+const tabMap = {
+    films: { key: 'movie', label: 'Movie', icon: <MovieIcon />, genre: 'Film' },
+    series: { key: 'series', label: 'Series', icon: <SeriesIcon />, genre: 'Series' },
+    dorams: { key: 'dorams', label: 'Dorams', icon: <DoramsIcon />, genre: 'Dorama' },
+    anime: { key: 'anime', label: 'Anime', icon: <AnimeIcon />, genre: 'Anime' },
+    cartoons: { key: 'cartoons', label: 'Cartoons', icon: <CartoonIcon />, genre: 'Cartoon' },
+};
+
 const GenreTabs = () => {
-    const [activeTab, setActiveTab] = useState('1');
+    const navigate = useNavigate();
+    const { tab } = useParams(); // /home/:tab
+    const normalizedTab = tab?.toLowerCase() || "movie";
+
+    const [activeTab, setActiveTab] = useState(tab || 'films');
+
+    const [sortType, setSortType] = useState(null);
+    const [sortYear, setSortYear] = useState(null);
+    const [rating, setRating] = useState(0);
+    const [selectedGenres, setSelectedGenres] = useState(() => {
+        const saved = sessionStorage.getItem('selectedGenres');
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    const [initialized, setInitialized] = useState(false);
+
+    
+    // Update active tab when URL changes
+    useEffect(() => {
+        if (normalizedTab && tabMap[normalizedTab]) setActiveTab(normalizedTab);
+        localStorage.setItem("lastTab", normalizedTab);
+    }, [normalizedTab]);
+
+    // Load filters from sessionStorage on mount
+    useEffect(() => {
+        const savedFilters = JSON.parse(sessionStorage.getItem('filmFilters'));
+        if (savedFilters) {
+            setSortType(savedFilters.sortType || null);
+            setSortYear(savedFilters.sortYear || null);
+            setRating(savedFilters.rating || 0);
+            setSelectedGenres(savedFilters.selectedGenres || []);
+            setActiveTab(savedFilters.activeTab || '1');
+        }
+        setInitialized(true); // mark that initial load is complete
+    }, []);
+
+    // Save filters to sessionStorage only after initial load
+    useEffect(() => {
+        if (!initialized) return; // skip the first render
+        const filtersToSave = { sortType, sortYear, rating, selectedGenres, activeTab };
+        sessionStorage.setItem('filmFilters', JSON.stringify(filtersToSave));
+    }, [sortType, sortYear, rating, selectedGenres, activeTab, initialized]);
 
     const handleTabChange = (key) => {
         setActiveTab(key);
+        setSelectedGenres([]);
+        setSortType(null);
+        setSortYear(null);
+        setRating(0);
+        navigate(`/home/${key}`); // update URL
     };
-    const [selectedGenres, setSelectedGenres] = useState([]);
 
     const handleGenreChange = (genres) => {
         setSelectedGenres(genres);
+        sessionStorage.setItem('selectedGenres', JSON.stringify(genres));
     };
-
-    const tabs = [
-        { key: "1", label: "Movie", icon: <MovieIcon />, genre: 'Film' },
-        { key: "2", label: "Series", icon: <SeriesIcon />, genre: 'Series' },
-        { key: "3", label: "Dorams", icon: <DoramsIcon />, genre: 'Dorama' },
-        { key: "4", label: "Anime", icon: <AnimeIcon />, genre: 'Anime' },
-        { key: "5", label: "Cartoons", icon: <CartoonIcon />, genre: 'Cartoon' },
-    ];
 
     console.log("Selected Genres in Tabs: ", selectedGenres);
 
@@ -90,20 +139,21 @@ const GenreTabs = () => {
             },
         }}>
             <Tabs activeKey={activeTab} tabBarStyle={{ borderBottom: 'none' }} onChange={handleTabChange} className={style.tabsContainer}>
-                {tabs.map((tab) => (
+                {Object.values(tabMap).map((tabItem) => (
                     <Tabs.TabPane
                         tab={
-                            <span className={activeTab === tab.key ? style.activeTab : ''}>
+                            <span className={activeTab === tabItem.key ? style.activeTab : ''}>
                                 <div className={style.tabs}>
-                                    {tab.icon}
-                                    <p>{tab.label}</p>
+                                    {tabItem.icon}
+                                    <p>{tabItem.label}</p>
                                 </div>
                             </span>
                         }
-                        key={tab.key}
+                        key={tabItem.key}
                     >
-                        <CarouselGenres onGenreChange={activeTab === tab.key ? handleGenreChange : null} />
-                        <SortedFilms selectedGenres={activeTab === tab.key ? selectedGenres : []} films={activeTab === tab.key ? tab.genre : []} />
+                        <CarouselGenres selectedGenres={selectedGenres} onGenreChange={setSelectedGenres} />
+                        <FilmsFilterControls sortType={sortType} sortYear={sortYear} rating={rating} onChange={({ sortType, sortYear, rating }) => { setSortType(sortType); setSortYear(sortYear); setRating(rating); }} />
+                        <SortedFilms selectedGenres={selectedGenres} films={tabItem.genre} sortType={sortType} sortYear={sortYear} rating={rating} />
                     </Tabs.TabPane>
                 ))}
             </Tabs>

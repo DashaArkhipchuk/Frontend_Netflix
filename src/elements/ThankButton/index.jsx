@@ -34,6 +34,8 @@ const ThankButton = ({ route, text, theStyle, onSubmit, castingId, isCastingIdNe
             <button type="button" className={theStyle === "submitBtn" ? style.submitBtn : style.sendSubmissionButton} onClick={handleClick}>
                 {text}
             </button>
+   {console.log('rendering, isModalOpen:', isModalOpen)}
+
 
             {isModalOpen && (
                 <div className={style.modalOverlay}>

@@ -16,8 +16,8 @@
     border-radius: 22px;
     background-color: $the-grey-color;
     color: $primary-color;
-    padding: 6px 25px;
-    min-width: 100px; // Задайте ширину для елементів
+    padding: 6px 0px;
+    min-width: 120px; // Задайте ширину для елементів
     flex: 1; // Додайте flex для адаптивності
     margin: 0 5px; // Відстань між жанрами
     cursor: pointer;
@@ -35,6 +35,7 @@
     line-height: 21px;
     font-weight: 400;
     text-align: center;
+    padding: 0px 20px;
 }
 
 .arrow {
@@ -43,4 +44,5 @@
     cursor: pointer;
     font-size: 24px; // Задайте потрібний розмір
     padding: 10px;
+    color: $primary-color;
 }

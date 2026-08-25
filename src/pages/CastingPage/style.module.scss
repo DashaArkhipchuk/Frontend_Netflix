@@ -13,7 +13,7 @@
 
 .containerItem {
     // margin-top: 300rem;;
-    margin-top:1rem;
+    margin-top:4rem;
 
 }
 
@@ -99,14 +99,14 @@
 }
 
 .whiteBlock {
-    background-color: $light-grey-color;
-    width: 80vw;
+    background-color: $the-grey-color;
+    width: 65vw;
     height: auto;
     border-radius: 1px;
 }
 
 .textBlock1 {
-    color: $background-color;
+    color: $secondary-color;
     margin: 17px;
     line-height: 21px;
     text-align: left;
@@ -202,6 +202,24 @@
     display: flex;
 }
 
+.headerBlock {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.btnSubmit {
+    width: 314px;
+    height: 43px;
+    background-color: $background-color;
+    color: $primary-color;
+    border-radius: 31px;
+    border: none;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 1rem;
+}
+
 
 .roleDesc {
     cursor: pointer; // Стиль курсору для заголовку
@@ -218,6 +236,8 @@
     justify-content: flex-start;
     cursor: pointer;
     margin-left: 22px;
+    margin-top: 2rem;
+    width:20vw;
 }
 
 .arrow {
@@ -238,4 +258,49 @@
 .roleDesc {
     text-align: left;
     margin-left: 20px;
+}
+
+.mainContent {
+  display: flex;
+  flex: 1;
+  gap: 50px;
+  margin: 5rem, 0px;
+}
+
+.sidebar {
+  width: 300px;
+  margin: 100px 20px 20px 20px;
+  padding: 20px;
+  border-radius: 10px;
+  height: fit-content;
+}
+
+.filterTitle {
+  font-weight: 600;
+  font-size: 16px;
+  color: #6C6C6C;
+  margin-bottom: 10px;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  //width:80vw;
+}
+
+.pagination {
+    :global {
+        .ant-pagination-options-quick-jumper input {
+            background-color: #262425 !important;
+            color: #F9F1E4 !important;
+            border-color: #800020 !important;
+        }
+    }
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

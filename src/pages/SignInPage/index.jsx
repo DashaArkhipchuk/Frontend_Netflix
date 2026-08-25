@@ -4,8 +4,10 @@ import style from './style.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Checkbox, Button, DatePicker, ConfigProvider } from 'antd';
 import moment from 'moment';
+import { useAuth } from '../../elements/AuthProvider';
 
 const SignInPage = () => {
+    const { setToken } = useAuth();
     const navigate = useNavigate();
 
     // Стани для зберігання даних форми
@@ -42,8 +44,14 @@ const SignInPage = () => {
                 birthDate: moment(values.birthDate).format('YYYY-MM-DD'), // Форматуємо перед відправкою
             });
             console.log('Registration successful', response.data);
-            localStorage.setItem('authToken', response.data.authToken);
+
+            setToken(
+                response.data.token,
+                response.data.isActor,
+                response.data.isCastingDirector  // note: register uses isCastingDirector
+            );
             navigate('/plan');
+
         } catch (error) {
             console.error('Registration failed', error.response?.data);
         }

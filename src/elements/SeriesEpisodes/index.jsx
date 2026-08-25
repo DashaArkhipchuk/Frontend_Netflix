@@ -15,7 +15,7 @@ const SeriesEpisodes = ({ id }) => {
     const [selectedSeason, setSelectedSeason] = useState(null);
     const [selectedEpisode, setSelectedEpisode] = useState(null);
     const navigate = useNavigate();
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
 
     const fetchMovieData = async () => {
         try {

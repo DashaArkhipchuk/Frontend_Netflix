@@ -5,19 +5,17 @@
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh;
-    overflow-y: auto;
+    top: 0;
+    bottom: 0;
     transition: width 0.3s ease;
     z-index: 1;
-
-
 }
 
-.sidebar-open {
+.sidebarOpen {
     width: 250px;
 }
 
-.sidebar-closed {
+.sidebarClosed {
     width: 50px;
 }
 
@@ -45,11 +43,9 @@
 
 .content {
     position: absolute;
-    top: 0;
-    left: 0;
+    min-height: 100vh;
     right: 0;
     bottom: 0;
-    overflow-y: auto;
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
