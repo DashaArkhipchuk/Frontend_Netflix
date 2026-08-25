@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react';
 import style from './style.module.scss';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import useRequireRole from '../../tools/useRequireRole';
+import { useError } from '../../tools/errorContext';
+import { handleApiError } from '../../tools/handleApiError';
 
 const DirectorProfilePage = () => {
+    useRequireRole({ requireDirector: true });
+    const { addError } = useError();
+
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -36,36 +42,30 @@ const DirectorProfilePage = () => {
         e.preventDefault(); // Prevent default form submission behavior
 
         try {
-            const token = localStorage.getItem('authToken'); // Get token from localStorage
+            const token = localStorage.getItem('token'); // Get token from localStorage
 
             const response = await axios.post(
                 'https://localhost:7118/api/CastingDirectorProfile/CreateProfile',
                 formData,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Include token in headers
+                        'Content-Type': 'application/json'
                     },
                 }
             );
 
             if (response.status === 200 || response.status === 201) {
                 console.log('Profile created successfully:', response.data);
-                navigate('/return-homepage'); // Navigate to the home page after successful profile creation
+                navigate('/casting'); // Navigate to the home page after successful profile creation
             } else {
                 console.error('Error creating profile:', response.data);
+                addError('An error occurred while creating your profile.');
+                if (response.status === 400) {
+                    addError(response.data.detail);
+                }
             }
         } catch (error) {
-            // Enhanced error logging for debugging
-            if (error.response) {
-                console.error('Error response data:', error.response.data);
-                console.error('Error status:', error.response.status);
-                console.error('Error headers:', error.response.headers);
-            } else if (error.request) {
-                console.error('Error request:', error.request);
-            } else {
-                console.error('Error message:', error.message);
-            }
+            handleApiError(error, addError);
         }
     };
 
@@ -76,7 +76,7 @@ const DirectorProfilePage = () => {
                 const response = await axios.get('https://localhost:7118/api/Location/GetAllRegionNames');
                 setLocations(response.data);
             } catch (error) {
-                console.error('Error fetching locations:', error);
+                handleApiError(error, addError);
             }
         };
         fetchLocations();
@@ -91,7 +91,7 @@ const DirectorProfilePage = () => {
                 const response = await axios.get('https://localhost:7118/api/CastingDirectorProfileType/GetAll');
                 setProfileTypes(response.data);
             } catch (error) {
-                console.error('Error fetching locations:', error);
+                handleApiError(error, addError);
             }
         };
         fetchLocations();

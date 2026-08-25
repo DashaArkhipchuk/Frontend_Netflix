@@ -2,68 +2,112 @@ import React, { useState } from 'react';
 import { Button, Drawer } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import style from './style.module.scss';
-import EditCastingModal from '../EditCastingModal'; // Імпорт модалки
+import EditCastingModal from '../EditCastingModal';
 import DeleteCastingModal from '../DeleteCastingModal';
+import { useAuth } from '../AuthProvider';
 
-const DrawerCasting = ({ castingId, tabCasting = '1' }) => {
+const DrawerCasting = ({ castingId, submissionId, tabCasting = '1', card}) => {
     const [open, setOpen] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const navigate = useNavigate();
+    const { isActor, isDirector, actorProfileExists, directorProfileExists } = useAuth();
 
-    const showDrawer = () => {
-        setOpen(true);
+    const handleSubmitClick = () => {
+        if (isActor && actorProfileExists) {
+            navigate(`/casting-billboard/${castingId}`);
+        } else {
+            setOpen(true);
+        }
     };
 
-    const onClose = () => {
-        setOpen(false);
+    const handleViewDetails = () => {
+        navigate(`/casting-billboard/${castingId}`);
     };
 
-    const handleCreateActorProfilePage = () => {
-        navigate(`/create-actor-profile/${castingId}`);
-    };
+    const onClose = () => setOpen(false);
+    const handleCreateActorProfilePage = () => navigate(`/create-actor-profile/${castingId}`);
+    const handleGetStartedPage = () => navigate('/get-started');
+    const handleEditCastingPage = () => navigate(`/edit-casting/${castingId}`);
+    const handleViewDetailsPage = () => navigate(`/casting-billboard/${castingId}`);
+    const handleViewActorSubmissionPage = () => navigate(`/submission-detail/${submissionId}`, { state: { submission: card } });
+    const handleViewSubmissions = () => navigate(`/submission-list/${castingId}`);
+    const showModal = () => setIsModalVisible(true);
+    const handleCancel = () => setIsModalVisible(false);
 
-    const handleGetStartedPage = () => {
-        navigate('/get-started');
-    };
+    // Tab 1 — Casting Calls (all users)
+    if (tabCasting === '1') {
+        return (
+            <>
+                {isActor && (
+                    <button type="button" onClick={handleSubmitClick} className={style.btnSubmit}>
+                        SUBMIT
+                    </button>
+                )}
+                {!isActor && isDirector && (
+                    <button type="button" onClick={handleViewDetails} className={style.btnSubmit}>
+                        VIEW DETAILS
+                    </button>
+                )}
 
-    const handleEditCastingPage = () => {
-        navigate(`/edit-casting/${castingId}`);
-    };
+                <Drawer
+                    className={style.drawer}
+                    title={<img className={style.logo} src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png" alt="logo" />}
+                    onClose={onClose}
+                    open={open}
+                >
+                    <h1 className={style.tabContentName}>Ready to submit to this role?</h1>
+                    <p>Log in or sign up today and get access to thousands of high-quality <b>acting jobs</b>.</p>
 
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
+                    {isActor && !actorProfileExists && (
+                        <>
+                            <p className={style.question}>Ready to get started as an Actor?</p>
+                            <Button className={style.buttonYes} onClick={handleCreateActorProfilePage}>YES</Button>
+                        </>
+                    )}
+                </Drawer>
+            </>
+        );
+    }
 
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
+    // Tab 2 — Actor: their submissions
+    if (tabCasting === '2' && isActor) {
+        return (
+            <div className={style.buttons}>
+                <button type="button" onClick={handleViewDetails} className={style.btnSubmit}>
+                    VIEW DETAILS
+                </button>
 
-    return (
-        <>
-            {tabCasting === '1' ? (
-                <button type="submit" onClick={showDrawer} className={style.btnSubmit}>SUBMIT</button>
-            ) : (
+                <button type="button" onClick={handleViewActorSubmissionPage} className={style.btnSubmit}>
+                    VIEW MY SUBMISSION
+                </button>
+            </div>
+        );
+    }
+
+    // Tab 3 — Director: their own castings (edit/delete)
+    if (tabCasting === '3') {
+        return (
+            <>
                 <div className={style.buttons}>
-                    <button type="button" onClick={handleEditCastingPage} className={style.btnSubmit}>EDIT</button>
-                    <button type="button" onClick={showModal} className={style.btnSubmit}>DELETE</button>
+                    <div className={style.row}>
+                        <button type="button" onClick={handleViewDetails} className={style.btnSubmit}>VIEW DETAILS</button>
+                        <button type="button" onClick={handleViewSubmissions} className={style.btnSubmit}>VIEW SUBMISSIONS</button>
+                    </div>
+                    <div className={style.row}>
+                        <button type="button" onClick={handleEditCastingPage} className={style.btnSubmit}>EDIT</button>
+                        <button type="button" onClick={showModal} className={style.btnSubmit}>DELETE</button>
+                    </div>
                 </div>
-            )}
-            <DeleteCastingModal
-                isVisible={isModalVisible}
-                onCancel={handleCancel}
-                castingId={castingId}
-            />
+                <DeleteCastingModal
+                    isVisible={isModalVisible}
+                    onCancel={handleCancel}
+                    castingId={castingId}
+                />
+            </>
+        );
+    }
 
-            <Drawer className={style.drawer} title={<img className={style.logo} src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png" alt="logo" />} onClose={onClose} open={open}>
-                <h1 className={style.tabContentName}>Ready to submit to this role?</h1>
-                <p>Log in or sign up today and get access to thousands of high-quality <b>acting jobs</b>.</p>
-                <p className={style.question}>Ready to get started as an Actor?</p>
-                <Button className={style.buttonYes} onClick={handleCreateActorProfilePage}>YES</Button>
-                <p className={style.question}>Ready to get started as a Director?</p>
-                <Button className={style.buttonYes} onClick={handleGetStartedPage}>YES</Button>
-            </Drawer>
-        </>
-    );
+    return null;
 };
 
 export default DrawerCasting;

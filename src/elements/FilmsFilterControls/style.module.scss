@@ -1,0 +1,132 @@
+@import '../../styles/variables.scss';
+
+
+.sortControls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 10rem;
+    padding: 12px 0;
+}
+
+.group1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    ;
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.label {
+    color: #f9f1e4;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+}
+
+.latestBtn {
+    background: $the-grey-color !important;
+    border: 1px solid $the-grey-color;
+    color: #f9f1e4;
+    border-radius: 999px;
+    padding: 6px 20px;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.active {
+    background: $colorPrimary !important;
+}
+
+.yearSelect {
+    min-width: 100px;
+    color: $primary-color !important;
+
+    :global(.ant-select-selector) {
+        background: $the-grey-color !important;
+        border-radius: 999px !important;
+        border: none !important;
+        color: $primary-color !important;
+        height: 32px !important;
+        padding: 0 20px !important;
+    }
+
+    :global(.ant-select-selection-placeholder) {
+        color: $primary-color !important; // works now
+    }
+
+    :global(.ant-select-arrow) {
+        color: $primary-color !important;
+    }
+}
+
+.yearDropdown {
+    background: $dark-grey-color !important;
+
+    .ant-select-item {
+        color: $primary-color !important;
+        font-size: 14px;
+        line-height: 21px;
+        font-weight: 400;
+        padding: 0px 20px;
+    }
+}
+
+.ratingControl {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 400px;
+
+    :global(.ant-slider-track) {
+        background-color: #FFD700 !important;
+    }
+
+    :global(.ant-slider-rail) {
+        background-color: $the-grey-color !important;
+    }
+
+    :global(.ant-slider-handle) {
+    border: none !important;
+
+    &::after {
+      background-color: #FFB052 !important;
+      box-shadow: 0 0 0 1px #FFB052 !important;
+      width: 10px;
+      height: 10px;
+      transition: all 0.2s ease;
+    }
+
+    // hover state
+    &:hover::after {
+      background-color: #FFB052 !important;
+      transform: scale(1.2);
+    }
+
+    // dragging/active state
+    &.ant-slider-handle-dragging::after {
+      background-color: #FFA500 !important; // a bit darker orange
+      transform: scale(1.3);
+    }
+  }
+}
+
+.starIcon {
+    color: #FFD700;
+    font-size: 16px;
+}
+
+.ratingSlider {
+    flex: 1;
+}
+
+.ratingValue {
+    color: #FFD700;
+    font-size: 14px;
+    min-width: 32px;
+    text-align: right;
+}

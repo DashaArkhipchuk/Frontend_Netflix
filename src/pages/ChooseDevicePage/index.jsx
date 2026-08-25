@@ -10,10 +10,10 @@ const ChooseDevicePage = () => {
     const { devices = "zero" } = location.state || {};
 
     const handleBack = () => {
-        navigate('/'); // Перенаправлення на PlanPage
+        navigate(-1); // Перенаправлення на PlanPage
     };
     const handleHomePage = () => {
-        navigate('/home'); // Перенаправлення на HomePage
+        navigate('/'); // Перенаправлення на HomePage
     };
 
     const deviceCountMap = {

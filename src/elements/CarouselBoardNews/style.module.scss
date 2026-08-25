@@ -1,20 +1,134 @@
 @import '../../styles/variables.scss';
 
-.contentArea {
-    background-color: $secondary-color;
-    background-size: cover;
-    padding: 10rem;
-    z-index: 10;
+.slideContainer {
     width: 100%;
-    height: 600px;
+    height: 800px; // Set height here instead
+}
+
+.contentArea {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    background: #1a1a1a; // Fallback color
+}
+
+.newsImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%; // Focus on upper portion (where most news images have important content)
+    z-index: 0;
+}
+
+.overlay {
+    position: relative;
+    z-index: 1;
+    padding: 4rem;
+    max-width: 55%;
+    color: #fff;
+    
+    // Add gradient overlay on the image
+    &::before {
+        content: '';
+        position: absolute;
+        top: -100px;
+        left: -50px;
+        right: -50px;
+        bottom: -50px;
+        background: linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(0, 0, 0, 0.7) 100%
+        );
+        z-index: -1;
+        pointer-events: none;
+    }
+    
+    @media (max-width: 992px) {
+        max-width: 70%;
+        padding: 3rem;
+    }
+    
+    @media (max-width: 768px) {
+        max-width: 100%;
+        padding: 2rem;
+    }
 }
 
 .newsTitle {
-    margin: 0 0 1rem 0;
-    max-width: 35rem;
+    margin: 0 0 0.8rem 0;
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+    
+    @media (max-width: 992px) {
+        font-size: 2.2rem;
+    }
+    
+    @media (max-width: 768px) {
+        font-size: 1.6rem;
+    }
 }
 
 .newsContext {
-    width: 35rem;
-    color:$primary-color;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+    margin-bottom: 1.5rem;
+    max-width: 90%;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    
+    @media (max-width: 992px) {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+    
+    @media (max-width: 768px) {
+        font-size: 0.9rem;
+    }
+}
+
+.readMore {
+    display: inline-block;
+    background: rgba(128, 0, 32, 0.9);
+    color: #fff;
+    padding: 0.8rem 2.2rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    backdrop-filter: blur(5px);
+    
+    &:hover {
+        background: rgba(128, 0, 32, 1);
+        transform: translateX(8px) scale(1.03);
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 20px rgba(128, 0, 32, 0.4);
+    }
+}
+
+.noNews {
+    padding: 4rem;
+    text-align: center;
+    color: #fff;
+    background: $secondary-color;
+    border-radius: 8px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

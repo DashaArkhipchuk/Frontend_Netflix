@@ -1,48 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Carousel } from 'antd';
-import style from './style.module.scss'
+import { useNavigate } from 'react-router-dom';
+import style from './style.module.scss';
 
-const CarouselBoard = () => {
-  const onChange = (currentSlide) => {
-    console.log(currentSlide);
+const CarouselBoard = ({ news1, news2, news3 }) => {
+  const navigate = useNavigate();
+  const newsItems = [news1, news2, news3].filter(item => item && item.id);
+
+  if (newsItems.length === 0) {
+    return <div className={style.noNews}>No featured news available</div>;
+  }
+
+  const handleReadMore = (id) => {
+    navigate(`/news-details/${id}`);
   };
 
-  const [news, setNews] = useState([]);
-
-  useEffect(() => {
-    const fetchNews = async () => {
-      const ids = [
-        'e6634b8c-149b-45be-a266-475309fe3762',
-        '1a1ba913-411e-4822-bc97-1f860a701c48',
-        '8fa27a5c-8694-44a1-a896-07cbafb23c3b',
-      ];
-
-      try {
-        const newsPromises = ids.map(id =>
-          fetch(`https://localhost:7118/api/News/${id}`).then(response => response.json())
-        );
-
-        const newsData = await Promise.all(newsPromises);
-        setNews(newsData);
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchNews();
-  }, []);
-
   return (
-    <Carousel>
-      {news.map((item, index) =>
-        <div key={index}>
-          <div style={{ backgroundImage: `url(${item.imageURL})` }} className={style.contentArea}>
-            <h1 className={style.newsTitle}>{item.title}</h1>
-            <p className={style.newsContext}>{item.description}</p>
+    <Carousel autoplay>
+      {newsItems.map((item) => (
+        <div 
+          key={item.id} 
+          className={style.slideContainer}
+          onClick={() => handleReadMore(item.id)}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className={style.contentArea}>
+            <img 
+              src={item.imageURL} 
+              alt={item.title}
+              className={style.newsImage}
+              loading="lazy"
+            />
+            <div className={style.overlay}>
+              <h1 className={style.newsTitle}>{item.title}</h1>
+              <p className={style.newsContext}>
+                {item.description && item.description.length > 150 
+                  ? `${item.description.substring(0, 150)}...` 
+                  : item.description}
+              </p>
+              <button 
+                className={style.readMore}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevents double navigation
+                  handleReadMore(item.id);
+                }}
+              >
+                Read More →
+              </button>
+            </div>
           </div>
         </div>
-      )}
+      ))}
     </Carousel>
   );
 };

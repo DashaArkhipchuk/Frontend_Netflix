@@ -4,9 +4,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthProvider';
 
 const BurgerMenu = () => {
     const navigate = useNavigate();
+    const { isActor, isDirector } = useAuth();
 
     const cacheId = (key, value) => {
         localStorage.setItem(key, value);
@@ -41,46 +43,38 @@ const BurgerMenu = () => {
         navigate('/casting');
     }
     const handleMovie = () => {
-        const movieId = getCachedId('movieId') || 'e8b60dce-08a6-4b72-8c24-3a7269248175'; // Кешування або дефолтне значення
-        cacheId('movieId', movieId); // Зберігаємо ID
-        navigate(`/Film/${movieId}`);
+        navigate(`/home/Movie`);
     };
 
     const handleSeries = () => {
-        const seriesId = getCachedId('seriesId') || 'd5e7abfc-8cce-4aeb-819b-bb2d3a080aaa';
-        cacheId('seriesId', seriesId);
-        navigate(`/Series/${seriesId}`);
+        navigate(`/home/Series`);
     };
 
     const handleDorama = () => {
-        const doramaId = getCachedId('doramaId') || '9300a5c0-e2ba-452f-a7e6-feb11e324aa1';
-        cacheId('doramaId', doramaId);
-        navigate(`/Dorama/${doramaId}`);
+        navigate(`/home/Dorams`);
     };
 
     const handleAnime = () => {
-        const animeId = getCachedId('animeId') || 'ae400aba-178d-45fb-9468-e78a94b57c16';
-        cacheId('animeId', animeId);
-        navigate(`/Anime/${animeId}`);
+        navigate(`/home/Anime`);
     };
 
     const handleCartoon = () => {
-        const cartoonId = getCachedId('cartoonId') || 'c47cdbbf-2c77-496b-b4a3-f8cd6c437574';
-        cacheId('cartoonId', cartoonId);
-        navigate(`/Cartoon/${cartoonId}`);
+        navigate(`/home/Cartoons`);
     };
     const handleHome = () => {
-        navigate('/home');
+        navigate('/');
     }
     const handleCastingDirector = () => {
-        navigate('/casting-director');
+        navigate('/director-home');
     }
     const handleNews = () => {
         navigate('/news');
     }    
-    const handleToLogin = () => {
-        localStorage.removeItem('authToken');
-        navigate('/login');
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('isActor');
+        localStorage.removeItem('isDirector');
+        navigate('/logout');
     }
 
     return (
@@ -213,25 +207,8 @@ const BurgerMenu = () => {
                             </a>
                         </li>
 
-
-                        {/* casting */}
-                        < li onClick={handleCasting} className={`${style.listPoint}`}>
-                            <a href="#" className="d-flex py-2">
-                                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_54_120)">
-                                        <path d="M14.7997 0.875H16.625C17.1684 0.875 17.6881 0.97475 18.1685 1.15675L13.2003 6.125H9.54975L14.7997 0.875ZM21 6.125V5.25C21 4.025 20.4934 2.9155 19.6787 2.121L15.6747 6.125H21ZM0 7.875V15.75C0 18.1624 1.96263 20.125 4.375 20.125H16.625C19.0374 20.125 21 18.1624 21 15.75V7.875H0ZM9.20675 0.875L3.88325 6.125H7.07525L12.3253 0.875H9.20675ZM1.39125 6.125L6.71475 0.875H4.375C1.96263 0.875 0 2.83763 0 5.25V6.125H1.39125Z" fill="#262425" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_54_120">
-                                            <rect width="21" height="21" fill="white" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                                <p> Casting</p>
-                            </a>
-                        </li>
-
                         {/* casting calls */}
+                        {isActor && (
                         <li onClick={handleCasting} className={style.listPoint}>
                             <a href="#" className="d-flex py-2">
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -247,8 +224,10 @@ const BurgerMenu = () => {
                                 <p> Casting Calls</p>
                             </a>
                         </li>
+                        )}
 
                         {/* casting directors */}
+                        {isDirector && (
                         <li onClick={handleCastingDirector} className={style.listPoint}>
                             <a href="#" className="d-flex py-2">
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -264,6 +243,7 @@ const BurgerMenu = () => {
                                 <p> Casting Directors</p>
                             </a>
                         </li>
+                        )}
 
                         {/* buy a ticket  */}
                         < li className={`${style.listPoint} `}>
@@ -371,15 +351,15 @@ const BurgerMenu = () => {
                             </a>
                         </ li>
 
-                        {/* change account */}
-                        <li onClick={handleToLogin} className={style.listPoint}>
+                        {/* logout */}
+                        <li onClick={handleLogout} className={style.listPoint}>
                             <a href="#" className="d-flex py-2">
                                 <svg width="16" height="21" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M7.875 10.5C10.7745 10.5 13.125 8.1495 13.125 5.25C13.125 2.3505 10.7745 0 7.875 0C4.9755 0 2.625 2.3505 2.625 5.25C2.625 8.1495 4.9755 10.5 7.875 10.5Z" fill="#262425" />
                                     <path d="M7.875 12.25C3.52775 12.2548 0.00483984 15.7778 0 20.125C0 20.6082 0.39174 21 0.874986 21H14.875C15.3582 21 15.75 20.6082 15.75 20.125C15.7452 15.7778 12.2222 12.2548 7.875 12.25Z" fill="#262425" />
                                 </svg>
 
-                                <p> Change Account</p>
+                                <p> Logout </p>
                             </a>
                         </li>
                     </ul >

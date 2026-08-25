@@ -3,17 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import style from './style.module.scss';
 import { Form, Input, Checkbox, Button, ConfigProvider } from 'antd';
+import { useAuth } from '../../elements/AuthProvider';
+import { useError } from '../../tools/errorContext';
+import { handleApiError } from '../../tools/handleApiError';
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const { setToken } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const { addError } = useError();
 
     useEffect(() => {
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('token');
         if (token) {
-            navigate('/home');
+            navigate('/');
         }
     }, [navigate]);
 
@@ -29,15 +33,17 @@ const LoginPage = () => {
             });
 
             if (response.status === 200) {
-                // Успішний логін, зберігаємо токен в localStorage
-                localStorage.setItem('authToken', response.data.token); // Збереження токену
-
-                console.log('Login successful');
-                navigate('/home');
+                setToken(
+                    response.data.token,
+                    response.data.isActor,
+                    response.data.isCastingDirector
+                );
+                navigate('/');
             }
         } catch (error) {
-            setErrorMessage('Login failed. Please check your credentials.');
+            const data = error.response?.data;
             console.error('Login error:', error);
+            handleApiError(error, addError);
         }
     };
 

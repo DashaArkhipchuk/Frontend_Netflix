@@ -1,0 +1,72 @@
+sidebar {
+  background-color: #1f1f1f;
+  color: #f0f0f0;
+  padding: 16px;
+  width: 260px;
+  border-radius: 8px;
+  overflow-y: auto;
+  height: 90vh;
+
+  // Make scroll nice
+  scrollbar-width: thin;
+  scrollbar-color: #555 #1f1f1f;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+}
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding-left: 8px;
+}
+
+.nestedCollapse {
+  background: transparent;
+  border: none;
+  margin-left: 8px;
+
+  :global(.ant-collapse-header) {
+    padding: 4px 0 !important;
+  }
+
+  :global(.ant-collapse-content-box) {
+    padding-left: 8px !important;
+  }
+}
+
+:global(.ant-collapse) {
+  background-color: transparent;
+  border: none;
+}
+
+:global(.ant-collapse-item) {
+  border: none;
+  margin-bottom: 10px;
+}
+
+:global(.ant-collapse-header) {
+  color: #f0f0f0 !important;
+  font-weight: 600;
+  padding: 8px 0 !important;
+}
+
+:global(.ant-checkbox-wrapper) {
+  color: #f0f0f0;
+}
+
+:global(.ant-collapse-content-box) {
+  padding: 8px 0 !important;
+}

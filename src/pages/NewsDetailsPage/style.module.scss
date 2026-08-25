@@ -1,19 +1,38 @@
 @import '../../styles/variables';
 
+.content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    background-color: #1f1f1f;
+}
+
 .container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 50px;
-    margin: auto;
+    width: 100%;
     margin-top: 30px;
+    padding: 0 24px;
+    box-sizing: border-box;
 }
 
 .arrowBack {
     width: 30px;
     height: 30px;
     color: #F9F1E4;
-    margin-top: 1rem;
+    // Header's hamburger toggle occupies the top-left corner, so this needs
+    // to clear its height/width rather than sit at margin-top: 1rem, which
+    // landed underneath it and swallowed the click.
+    margin-top: 5.5rem;
     margin-left: 3rem;
+    position: relative;
+    z-index: 10;
     cursor: pointer;
 
     &:hover {
@@ -23,7 +42,8 @@
 
 
 .newsDetails {
-    width: 770px;
+    flex: 1 1 500px;
+    max-width: 770px;
 }
 
 
@@ -41,22 +61,76 @@
 .publishingInfo {
     margin-bottom: 20px;
     margin-top: 20px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: #b8b8b8;
+    font-family: 'Poppins';
+    font-size: 13px;
 }
 
 .img {
-    width: 770px;
+    width: 100%;
+    max-width: 770px;
     height: 480px;
     background-color: #3a3a3a;
     object-fit: cover;
 }
 
-.content {
+.articleText {
     margin-top: 20px;
     font-family: 'Poppins';
     font-size: 14px;
     color: #f9f1e4;
+    line-height: 1.7;
+
+    p {
+        margin: 0 0 16px 0;
+        white-space: pre-wrap;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .topNewsContainer {
-    margin-top: 150px;
+    flex: 1 1 380px;
+    max-width: 420px;
+    margin-top: 60px;
+
+    h2 {
+        font-family: 'Poppins';
+        color: #F9F1E4;
+    }
+}
+
+.topNews {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.topNewsLink {
+    cursor: pointer;
+    display: block;
+}
+
+.noRelated {
+    color: #b8b8b8;
+    font-family: 'Poppins';
+    font-size: 13px;
+}
+
+.loadMoreBtn {
+    margin-top: 16px;
+    width: 100%;
+}
+
+.loadingWrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    width: 100%;
 }

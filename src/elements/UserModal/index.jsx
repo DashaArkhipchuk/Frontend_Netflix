@@ -13,7 +13,7 @@ const UserModal = () => {
 
     const navigate = useNavigate();
     const handleToLogin = () => {
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('token');
         navigate('/login');
     }
     const handleToActorProfilePage = () => {

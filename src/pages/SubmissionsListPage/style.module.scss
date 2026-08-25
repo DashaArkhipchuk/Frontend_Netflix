@@ -1,0 +1,198 @@
+.container {
+    width: 100vw;
+    padding: 1rem;
+    background-color: #262425;
+    min-height: 100vh;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: #f9f1e4;
+    font-family: 'Poppins';
+    font-size: 18px;
+    background-color: #262425;
+}
+
+.logo { height: 54px; }
+
+.line {
+    background-color: #343434;
+    border: none;
+    height: 1px;
+    margin: 8px 0;
+}
+
+.headerRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.pageTitle {
+    font-weight: 600;
+    font-family: 'Poppins';
+    font-size: 32px;
+    color: #800020;
+    margin: 0;
+    text-align: left;
+}
+
+.backBtn {
+    background-color: #343434;
+    border: 1px solid #f9f1e4;
+    color: #f9f1e4;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Poppins';
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background-color: #800020;
+        border-color: #800020;
+    }
+}
+
+.empty {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+}
+
+.emptyText {
+    font-family: 'Poppins';
+    font-size: 20px;
+    color: #5b5b5b;
+    font-weight: 600;
+}
+
+.card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background-color: #343434;
+    border-radius: 6px;
+    padding: 14px;
+    margin: 10px 0;
+}
+
+.previewCol { flex-shrink: 0; }
+
+.preview {
+    width: 130px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}
+
+.noPreview {
+    width: 130px;
+    height: 100px;
+    background-color: #515151;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins';
+    font-size: 12px;
+    color: #5b5b5b;
+}
+
+.infoCol {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.actorName {
+    font-family: 'Poppins';
+    font-size: 20px;
+    font-weight: 600;
+    color: #f9f1e4;
+    margin: 0;
+    text-align: left;
+}
+
+.note {
+    font-family: 'Poppins';
+    font-size: 14px;
+    color: #b0a9a0;
+    font-style: italic;
+    margin: 0;
+    text-align: left;
+}
+
+.emptyNote {
+    font-family: 'Poppins';
+    font-size: 14px;
+    color: #5b5b5b;
+    font-style: italic;
+    margin: 0;
+}
+
+.mediaRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.thumb {
+    width: 60px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #515151;
+}
+
+.mediaCount {
+    font-family: 'Poppins';
+    font-size: 12px;
+    color: #5b5b5b;
+    margin: 0;
+}
+
+.actionCol {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+.viewBtn {
+    background-color: #800020;
+    color: #f9f1e4;
+    border: none;
+    border-radius: 31px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins';
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+
+    &:hover { background-color: #930b2d; }
+}
+
+.pagination {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+
+    :global {
+        .ant-pagination-options-quick-jumper input {
+            background-color: #262425 !important;
+            color: #f9f1e4 !important;
+            border-color: #800020 !important;
+        }
+    }
+}

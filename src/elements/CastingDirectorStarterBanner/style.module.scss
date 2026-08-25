@@ -1,0 +1,64 @@
+@import '../../styles/variables.scss';
+
+.contentArea {
+    background-size: cover;
+    background-position: left 80%;
+    background-repeat: no-repeat;
+    z-index: 10;
+    width: 100%;
+    height: 95vh;
+    position: relative;
+}
+
+.contentInfo {
+    margin: 0;
+    padding: 10rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.contentInfoTitle {
+    color: $primary-color;
+    text-align: left;
+    font-size: 2.5rem;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+}
+
+.contentInfo p {
+    color: $primary-color;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-top: 1rem;
+    width: 40%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.buttonGet {
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $colorAccent;
+    color: $background-color;
+    border: none;
+    border-radius: 31px;
+    padding: 10px;
+    width: 14rem;
+    margin-top: 0.5rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $colorPrimary;
+        color:$primary-color;
+    }
+
+    p {
+        margin: 0;
+        padding-left: 10px;
+        font-weight: 500;
+
+    }
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Carousel } from 'antd';
+import { Link } from 'react-router-dom';
 import style from './style.module.scss'
 
 const CarouselBoard = () => {
@@ -13,9 +14,9 @@ const CarouselBoard = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       const ids = [
-        '85971b5b-b7c2-488c-ab42-074fba308f81',
-        '5d9ba290-93f1-45fd-9cb9-25b439821032',
-        'd4463347-bbda-47cd-97bf-28870d7b14e8',
+        'C20E4AEC-35A1-411D-9934-FCDF9D19657D',
+        'BDE0F922-04E1-47AE-9006-64F3189E46C5',
+        'ECDA35F7-E2F0-4C9B-B19A-5D32ED261B47',
       ];
 
       try {
@@ -58,6 +59,7 @@ const CarouselBoard = () => {
       {films.map((film, index) => (
         <div key={index}>
           <div style={{ backgroundImage: `url(${film.pictureUrl})` }} className={style.contentArea}>
+            <div className={style.contentInfo}>
             <p className={style.filmDuration}>Duration: {minutes[index]}m</p>
             <h1 className={style.filmTitle}>{film.name}</h1>
             <div className={style.filmInfo}>
@@ -73,18 +75,21 @@ const CarouselBoard = () => {
             </div>
             <p className={style.filmContext}>{film.about}</p>
             <div className={style.buttons}>
-              <button className={style.buttonWatch}>
-                <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13.5 6.63397C14.1667 7.01887 14.1667 7.98112 13.5 8.36602L2.25 14.8612C1.58333 15.2461 0.749999 14.765 0.749999 13.9952L0.75 1.00481C0.75 0.23501 1.58333 -0.246117 2.25 0.138783L13.5 6.63397Z" fill="#262425" />
-                </svg>
-                <p>Watch</p>
-              </button>
+              <Link to={`/Series/${film.id}`} key={film.id}>
+                <button className={style.buttonWatch}>
+                  <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.5 6.63397C14.1667 7.01887 14.1667 7.98112 13.5 8.36602L2.25 14.8612C1.58333 15.2461 0.749999 14.765 0.749999 13.9952L0.75 1.00481C0.75 0.23501 1.58333 -0.246117 2.25 0.138783L13.5 6.63397Z" fill="#262425" />
+                  </svg>
+                  <p>Watch</p>
+                </button>
+              </Link>
               <button className={style.buttonAddList}>
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M13.125 5.625H9.375V1.875C9.375 1.37772 9.17746 0.900805 8.82583 0.549175C8.47419 0.197544 7.99728 0 7.5 0C7.00272 0 6.52581 0.197544 6.17417 0.549175C5.82254 0.900805 5.625 1.37772 5.625 1.875V5.625H1.875C1.37772 5.625 0.900805 5.82254 0.549175 6.17417C0.197544 6.52581 0 7.00272 0 7.5C0 7.99728 0.197544 8.47419 0.549175 8.82583C0.900805 9.17746 1.37772 9.375 1.875 9.375H5.625V13.125C5.625 13.6223 5.82254 14.0992 6.17417 14.4508C6.52581 14.8025 7.00272 15 7.5 15C7.99728 15 8.47419 14.8025 8.82583 14.4508C9.17746 14.0992 9.375 13.6223 9.375 13.125V9.375H13.125C13.6223 9.375 14.0992 9.17746 14.4508 8.82583C14.8025 8.47419 15 7.99728 15 7.5C15 7.00272 14.8025 6.52581 14.4508 6.17417C14.0992 5.82254 13.6223 5.625 13.125 5.625Z" fill="#F9F1E4" />
                 </svg>
                 <p>Add List</p>
               </button>
+            </div>
             </div>
           </div>
         </div>

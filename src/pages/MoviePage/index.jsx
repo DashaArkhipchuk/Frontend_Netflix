@@ -6,6 +6,8 @@ import { IoIosArrowDropleftCircle } from 'react-icons/io';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
 import SeriesEpisodes from '../../elements/SeriesEpisodes';
+import { handleApiError } from '../../tools/handleApiError';
+import { useError } from '../../tools/errorContext';
 
 
 const MoviePage = () => {
@@ -15,6 +17,7 @@ const MoviePage = () => {
     const [error, setError] = useState(null);
     const [minutes, setMinutes] = useState(0);
     const navigate = useNavigate();
+    const { addError } = useError();
 
     const convertToMinutes = (time) => {
         if (!time || typeof time !== "string") {
@@ -45,17 +48,37 @@ const MoviePage = () => {
 
                 // Адаптація для обробки різних форматів
                 let movieData;
-                if (data.type === 'film') {
-                    movieData = data.film;  // Використовуємо film з першого JSON
+                let productionType;
+
+                if (data.type) {
+                    // Wrapped response like { type: "series", film: {...}, series: {...} }
+                    productionType = data.type;
+                    movieData =
+                        data.type === 'film'
+                            ? data.film
+                            : data.type === 'series'
+                                ? data.series
+                                : null;
                 } else {
-                    movieData = data; // Для другого JSON (film, series)
+                    // Direct entity from /Film/{id} or /Series/{id}
+                    productionType = type.toLowerCase();  // we know it from the route
+                    movieData = data;
+                }
+                console.log(productionType);
+
+                if (!movieData) {
+                    throw new Error(`Unsupported type: ${data.type}`);
                 }
 
-                setMovie(movieData);
+                setMovie({
+                    ...movieData,
+                    productionType
+                });
                 setMinutes(convertToMinutes(movieData.duration)); // виклик функції для перетворення тривалості
                 setLoading(false);
             } catch (error) {
                 setError(error.message);
+                handleApiError(error, addError);
                 setLoading(false);
             }
         };
@@ -84,7 +107,8 @@ const MoviePage = () => {
     };
 
     const handleBack = () => {
-        navigate('/home'); // Перенаправлення на HomePage
+        const lastTab = localStorage.getItem("lastTab") || "films";
+        navigate(`/home/${lastTab}`);
     };
 
     return (
@@ -100,7 +124,7 @@ const MoviePage = () => {
             </div>
             <div className={style.container}>
                 <div className={style.box}>
-                    <img src={movie.pictureUrl} alt="image" className={style.img} />
+                    <div className={style.imgContainer}><img src={movie.pictureUrl} alt="image" className={style.img} /></div>
                     <div className={style.content}>
                         <div className={style.blocks}>
                             <div className={style.firstColon}>
@@ -147,18 +171,7 @@ const MoviePage = () => {
                             </div>
                         </div>
                         <h3 className={style.description}>
-                            {movie.director} lives in New York with her sister and her lover,
-                            attends auctions all the time, and trains as an artist for a prestigious company.
-                            Her only goal is to please Claire Dupont and get her recommendation,
-                            which means a lot in the art world. She has nothing but failures until an influential
-                            company executive offers her a job as her assistant and arranges a working trip to
-                            London. She flies first class on the plane, where she meets the attractive and
-                            wealthy William. {movie.director} lies to William about being a company director.
-                            <br />In London, they begin to cross paths, and {movie.director} realises that her legend is starting
-                            to come apart at the seams. She tries to impress the boyfriend and maintain her
-                            complex role, so she continues to constantly lie to him and his mother,
-                            whom she meets in London. The key is to keep the secret and live up to her
-                            sudden promotion until it's real.
+                            {movie.about}
                         </h3>
                     </div>
                 </div>
@@ -177,16 +190,16 @@ const MoviePage = () => {
                     </button>
                 </div>
             </div>
-            
-            {type === 'Series'
+
+            {movie.productionType === 'series'
                 ?
                 <SeriesEpisodes id={id} />
                 :
-                <>
+                <div className={style.videoContainer}>
                     <video id="targetSection" className={style.videoBlock} controls>
                         <source src={movie.videoUrl} type="video/mp4" />
                     </video>
-                </>
+                </div>
             }
         </>
     );
